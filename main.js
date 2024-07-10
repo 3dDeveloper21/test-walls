@@ -47,6 +47,26 @@ function loop(timeMs) {
   const deltaTimeMs = timeMs - lastTimeMs;
   lastTimeMs = timeMs;
   point1.y += 0.01;
+
+  const points = getLinePoints(point1, point2, thickness);
+
+  scene.remove(line);
+
+  const shape = new THREE.Shape();
+  shape.moveTo(points[0].x, points[0].y);
+  shape.lineTo(points[1].x, points[1].y); // Line to next point
+  shape.lineTo(points[2].x, points[2].y); // Line to next point
+  shape.lineTo(points[3].x, points[3].y);
+  shape.lineTo(points[0].x, points[0].y);
+
+  const geometry = new THREE.ShapeGeometry(shape);
+  const material = new THREE.MeshBasicMaterial();
+
+  camera.position.z = 5;
+
+  const newLine = new THREE.Mesh(geometry, material);
+  scene.add(newLine);
+
   renderer.render(scene, camera);
   window.requestAnimationFrame(loop);
 }
